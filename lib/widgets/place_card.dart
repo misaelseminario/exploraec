@@ -6,7 +6,7 @@ import '../models/place.dart';
 import '../screens/detail_screen.dart';
 import '../theme/app_theme.dart';
 // TODO(sesion-05): OPCIONAL — descomenta la línea de abajo (Paso 7B — distancia en Inicio). No borres nada.
-// import '../services/location_service.dart';
+import '../services/location_service.dart';
 
 /// Tarjeta reutilizable que representa un [Place] en cualquier lista de
 /// la app (Inicio, resultados de categoría, etc.) — Sesión 2.
@@ -85,20 +85,20 @@ class PlaceCard extends StatelessWidget {
                 // no tiene la posición (antes de abrir el Mapa), así que el
                 // `Obx` no pinta nada; apenas `posicion` se llena, todas las
                 // tarjetas muestran la distancia sin recargar la lista.
-                // Obx(() {
-                //   final metros = Get.find<PlacesController>().distanciaA(place);
-                //   if (metros == null) return const SizedBox.shrink();
-                //   return Padding(
-                //     padding: const EdgeInsets.only(top: AppSpacing.xs),
-                //     child: Row(
-                //       children: [
-                //         const Icon(Icons.near_me, size: 14),
-                //         const SizedBox(width: AppSpacing.xs),
-                //         Text('A ${formatearDistancia(metros)} de ti', style: estilos.bodySmall),
-                //       ],
-                //     ),
-                //   );
-                // }),
+                Obx(() {
+                  final metros = Get.find<PlacesController>().distanciaA(place);
+                  if (metros == null) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(top: AppSpacing.xs),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.near_me, size: 14),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text('A ${formatearDistancia(metros)} de ti', style: estilos.bodySmall),
+                      ],
+                    ),
+                  );
+                }),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   place.descripcion,
