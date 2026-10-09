@@ -30,30 +30,25 @@ class HomeScreen extends GetView<PlacesController> {
           // Por qué: `Get.updateLocale` cambia el idioma activo y reconstruye
           // la app entera sin `setState` ni `context`: es estado global, igual
           // que `PlacesController`, pero manejado por el propio GetX.
-          // IconButton(
-          //   icon: const Icon(Icons.translate),
-          //   tooltip: 'idioma'.tr,
-          //   onPressed: () {
-          //     final esEspanol = Get.locale?.languageCode == 'es';
-          //     Get.updateLocale(esEspanol ? const Locale('en', 'US') : const Locale('es', 'EC'));
-          //   },
-          // ),
+          IconButton(
+            icon: const Icon(Icons.translate),
+            tooltip: 'idioma'.tr,
+            onPressed: () {
+              final esEspanol = Get.locale?.languageCode == 'es';
+              Get.updateLocale(esEspanol ? const Locale('en', 'US') : const Locale('es', 'EC'));
+            },
+          ),
           PopupMenuButton<String>(
             tooltip: 'Simular estado (solo práctica)',
             onSelected: controller.simular,
             // TODO(sesion-04): OPCIONAL — borra el bloque `itemBuilder` de abajo y descomenta el bloque completo. (Paso 6B — idioma)
             // Por qué: igual que en la barra inferior, el texto pasa a
             // `.tr` y la lista deja de ser `const`.
-            itemBuilder: (context) => const [
-              PopupMenuItem(value: 'normal', child: Text('Simular: normal')),
-              PopupMenuItem(value: 'vacio', child: Text('Simular: vacío')),
-              PopupMenuItem(value: 'error', child: Text('Simular: error')),
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'normal', child: Text('sim_normal'.tr)),
+              PopupMenuItem(value: 'vacio', child: Text('sim_vacio'.tr)),
+              PopupMenuItem(value: 'error', child: Text('sim_error'.tr)),
             ],
-            // itemBuilder: (context) => [
-            //   PopupMenuItem(value: 'normal', child: Text('sim_normal'.tr)),
-            //   PopupMenuItem(value: 'vacio', child: Text('sim_vacio'.tr)),
-            //   PopupMenuItem(value: 'error', child: Text('sim_error'.tr)),
-            // ],
           ),
         ],
       ),

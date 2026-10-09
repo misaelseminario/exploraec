@@ -91,13 +91,13 @@ class PlacesController extends GetxController {
   // `PlaceCard` no cambia al tocarlo. La versión real agrega o quita el
   // lugar de la lista reactiva `favoritos`: cualquier `Obx` que la lea (el
   // ícono del corazón, el contador de la pestaña Favoritos) se actualiza solo.
-  void alternarFavorito(Place lugar) {}
-  // void alternarFavorito(Place lugar) {
-  //   if (esFavorito(lugar)) {
-  //     favoritos.removeWhere((p) => p.id == lugar.id);
-  //   } else {
-  //     favoritos.add(lugar);
-  //   }
-  // }
+  // void alternarFavorito(Place lugar) {}
+  void alternarFavorito(Place lugar) {
+    if (esFavorito(lugar)) {
+      favoritos.removeWhere((p) => p.id == lugar.id);
+    } else {
+      favoritos.add(lugar);
+    }
+  }
    int get total => lugares.length;
 }
