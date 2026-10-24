@@ -43,8 +43,9 @@ class GastosRepository {
       return (resultado.gastos, false);
     } on ApiException catch (e) {
       final fallaDeInfraestructura = e.statusCode == null || e.statusCode! >= 500;
+      if (!fallaDeInfraestructura) rethrow;
       final guardados = _leer();
-      if (!fallaDeInfraestructura || guardados == null) rethrow;
+      if (guardados == null) rethrow;
       return (guardados, true);
     }
   }
@@ -60,8 +61,14 @@ class GastosRepository {
 
   /// Cierra y borra del disco la caja del usuario (se llama al cerrar sesión).
   Future<void> vaciar() async {
-    await _caja?.deleteFromDisk();
+    // En web, Hive 2.2.3 no cierra la base IndexedDB antes de borrarla y el
+    // borrado queda bloqueado para siempre: se cierra primero y luego se borra.
+    final caja = _caja;
     _caja = null;
+    if (caja == null) return;
+    final nombre = caja.name;
+    await caja.close();
+    await Hive.deleteBoxFromDisk(nombre);
   }
 
   Future<void> _guardar(List<Gasto> gastos) async {
@@ -74,7 +81,10 @@ class GastosRepository {
   }
 
   List<Gasto>? _leer() {
-    final guardado = _caja?.get(_claveGastos);
+    // Un 401 cierra la sesión (y la caja) mientras esta lectura sigue en marcha.
+    final caja = _caja;
+    if (caja == null || !caja.isOpen) return null;
+    final guardado = caja.get(_claveGastos);
     if (guardado is! List) return null;
     return guardado.map((m) => Gasto.fromMap(m as Map)).toList();
   }
